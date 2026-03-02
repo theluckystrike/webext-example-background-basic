@@ -1,0 +1,50 @@
+name: Validate Extension
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Validate manifest.json
+        run: |
+          cat src/manifest.json | python3 -m json.tool > /dev/null
+          echo "✓ manifest.json is valid JSON"
+          
+      - name: Check required fields
+        run: |
+          python3 << 'EOF'
+          import json
+          import sys
+          
+          with open('src/manifest.json') as f:
+              manifest = json.load(f)
+          
+          if 'background' not in manifest:
+              print("✗ Missing background service worker")
+              sys.exit(1)
+          
+          bg = manifest['background']
+          if 'service_worker' not in bg:
+              print("✗ Missing service_worker in background")
+              sys.exit(1)
+          
+          print("✓ Service worker configured")
+          print(f"  - File: {bg['service_worker']}")
+          EOF
+          
+      - name: Verify background file exists
+        run: |
+          if [ -f "src/background.js" ]; then
+            echo "✓ background.js present"
+          else
+            echo "✗ Missing background.js"
+            exit 1
+          fi

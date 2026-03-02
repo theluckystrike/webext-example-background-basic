@@ -1,0 +1,19 @@
+{
+  "name": "webext-example-background-basic",
+  "version": "1.0.0",
+  "description": "A Chrome extension demonstrating background service worker",
+  "author": "Zovo <hello@zovo.one>",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo 'No build required'",
+    "test": "echo 'No tests yet'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "background",
+    "service-worker",
+    "tutorial",
+    "beginner",
+    "manifest-v3"
+  ]
+}
